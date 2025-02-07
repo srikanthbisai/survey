@@ -13,6 +13,8 @@ const SurveyContext = createContext<SurveyContextType | null>(null);
 export const SurveyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const { user } = useAuth();
+  
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const setAnswer = (questionId: number, answer: string | string[]) => {
     setAnswers((prev) => {
@@ -35,7 +37,7 @@ export const SurveyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }));
   
     try {
-      const response = await fetch('http://localhost:3001/api/submit-survey', {
+      const response = await fetch(`${API_BASE_URL}/submit-survey`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

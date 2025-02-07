@@ -24,11 +24,13 @@ export const ViewResponse: React.FC = () => {
     }
   }, [user]);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   const fetchResponses = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:3001/api/get-responses/${user?.email}`, {
+      const response = await fetch(`${API_BASE_URL}/get-responses/${user?.email}`, {
         credentials: 'include',
       });
 
@@ -39,7 +41,6 @@ export const ViewResponse: React.FC = () => {
       const data = await response.json();
       
       if (data.success) {
-        // Ensure answers are in the correct format
         const formattedAnswers = data.answers.map((answer: SurveyResponse) => ({
           questionId: answer.questionId,
           answer: Array.isArray(answer.answer) ? answer.answer : [answer.answer]
@@ -59,7 +60,7 @@ export const ViewResponse: React.FC = () => {
 
   const handleEdit = () => {
     setIsEditing(true);
-    setEditedResponses([...responses]); // Create a deep copy for editing
+    setEditedResponses([...responses]); 
   };
 
   const handleAnswerChange = (questionId: number, newAnswer: string | string[]) => {
@@ -76,7 +77,7 @@ export const ViewResponse: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/update-survey', {
+        const response = await fetch(`${API_BASE_URL}/api/update-survey`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -185,7 +186,6 @@ export const ViewResponse: React.FC = () => {
     }
   };
 
-  // Rest of the component remains the same...
   return (
     <div className="w-2/3 mx-auto mt-6 p-4">
       <div className="flex justify-between items-center mb-6">
